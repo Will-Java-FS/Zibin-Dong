@@ -1,0 +1,10 @@
+-- Database name = project0
+-- Schema name = public
+
+CREATE TABLE if not exists groceries (
+	id serial primary key,
+	name varchar(50) unique not null,
+	category varchar(50),
+	price decimal(20,2) check (price >= 0),
+	quantity int check (quantity > 0)
+);
