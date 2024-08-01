@@ -1,5 +1,8 @@
 package com.revature.controllers;
 
+import com.revature.exception.ClientErrorException;
+import com.revature.exception.DuplicateNameException;
+import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Account;
 import com.revature.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +21,14 @@ public class AccountController {
 
     //Login to account
     @PostMapping
-    public ResponseEntity<Account> accountLogin(@RequestBody Account a) {
-        a = AccountService.login(a);
+    public ResponseEntity<Account> accountLogin(@RequestBody Account a) throws UnAuthorizedException{
+        a = as.login(a);
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
     //Create new account
     @PostMapping(consumes = "application/json", produces ="application/json")
-    public ResponseEntity<Account> addAccount(@RequestBody Account a) {
+    public ResponseEntity<Account> addAccount(@RequestBody Account a) throws ClientErrorException, DuplicateNameException {
         a = as.createAccount(a);
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
