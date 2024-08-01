@@ -1,9 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.models.Account;
-import com.revature.models.Grocery;
 import com.revature.services.AccountService;
-import com.revature.services.GroceryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,7 @@ public class AccountController {
     //Delete account by id
     @DeleteMapping("/{id}")
     public ResponseEntity<Account> deleteAccount(@PathVariable int id) {
-        return as.deleteAccount(id);
+        return as.deleteAccountByID(id);
     }
 
 }
