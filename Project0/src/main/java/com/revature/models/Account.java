@@ -2,6 +2,15 @@ package com.revature.models;
 
 
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
+
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class Account {
     /*
@@ -13,16 +22,28 @@ public class Account {
     // serial id of cust
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private int id;
 
     // username of cust
     @Column
+    @Getter
+    @Setter
     private String name;
 
     // password of cust
     @Column
+    @Getter
+    @Setter
     private int password;
 
+    @Column
+    @Getter
+    @Setter
     private boolean is_admin;
+
+    @OneToMany
+    private List<Grocery> groceryList;
 
 }
