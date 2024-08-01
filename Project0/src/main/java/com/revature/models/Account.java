@@ -18,7 +18,7 @@ public class Account {
     private int password;
 
     // the groceries that user had. It will link to the specific row of basket table
-    private Basket basket;
+    private Cart cart;
 
 
 }
