@@ -19,7 +19,7 @@ public class AccountController {
     //Login to account
     @PostMapping
     public ResponseEntity<Account> accountLogin(@RequestBody Account a) {
-        Account user = accountSerivce.login(a);
+        Account user = AccountService.login(a);
         if (user != null) return ResponseEntity.ok(user);
         return ResponseEntity.status(401).body(null);
     }
@@ -27,14 +27,7 @@ public class AccountController {
     //Create new account
     @PostMapping(consumes = "application/json", produces ="application/json")
     public ResponseEntity<Account> addAccount(@RequestBody Account a) {
-        a = as.addAccount(a);
+        a = as.createAccount(a);
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
-
-    //Delete account by id
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Account> deleteAccount(@PathVariable int id) {
-        return as.deleteAccountByID(id);
-    }
-
 }
