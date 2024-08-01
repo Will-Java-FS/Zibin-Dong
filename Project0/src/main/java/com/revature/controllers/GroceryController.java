@@ -24,7 +24,7 @@ public class GroceryController {
 
     //View item by id
     @GetMapping("/{id}")
-    public Grocery getGrocery() {return gs.getGrocery(id);}
+    public Grocery getGrocery(@PathVariable int id) {return gs.getGrocery(id);}
 
     //Create new item
     @PostMapping(consumes = "application/json", produces ="application/json")
@@ -37,7 +37,7 @@ public class GroceryController {
     @PutMapping("/{id}")
     public ResponseEntity<Grocery> updateGrocery(@PathVariable int id, @RequestBody Grocery g) {
         g.setId(id);
-        Grocery gOld = gs.getActor(id);
+        Grocery gOld = gs.getGrocery(id);
         if (gOld.getId() == id) {
             g = gs.updateGrocery(g);
             return new ResponseEntity<>(g, HttpStatus.OK);
