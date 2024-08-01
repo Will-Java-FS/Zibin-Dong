@@ -19,9 +19,8 @@ public class AccountController {
     //Login to account
     @PostMapping
     public ResponseEntity<Account> accountLogin(@RequestBody Account a) {
-        Account user = AccountService.login(a);
-        if (user != null) return ResponseEntity.ok(user);
-        return ResponseEntity.status(401).body(null);
+        a = AccountService.login(a);
+        return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
     //Create new account
