@@ -1,6 +1,8 @@
 package com.revature.models;
 
 
+import jakarta.persistence.*;
+
 public class Account {
     /*
     * For this table, we will add the general account info of users.
@@ -9,16 +11,18 @@ public class Account {
     * */
 
     // serial id of cust
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // username of cust
-    private String username;
+    @Column
+    private String name;
 
     // password of cust
+    @Column
     private int password;
 
-    // the groceries that user had. It will link to the specific row of basket table
-    private Cart cart;
-
+    private boolean is_admin;
 
 }
