@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.exception.ClientErrorException;
 import com.revature.models.Grocery;
 import com.revature.services.GroceryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,16 @@ public class GroceryController {
 
     //Create new item
     @PostMapping(consumes = "application/json", produces ="application/json")
-    public ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) {
+    public ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) throws ClientErrorException
+    {
         g = gs.addGrocery(g);
         return new ResponseEntity<>(g, HttpStatus.OK);
     }
 
     //Update item
     @PutMapping("/{id}")
-    public ResponseEntity<Grocery> updateGrocery(@PathVariable int id, @RequestBody Grocery g) {
+    public ResponseEntity<Grocery> updateGrocery(@PathVariable int id, @RequestBody Grocery g) throws ClientErrorException
+    {
         g.setId(id);
         Grocery gOld = gs.getGroceryByID(id);
         if (gOld.getId() == id) {
