@@ -27,7 +27,7 @@ public class Account {
     private boolean is_admin;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_owner")
+    @JoinColumn(name = "owner_id")
     @JsonManagedReference
     private List<Grocery> groceryList;
 }

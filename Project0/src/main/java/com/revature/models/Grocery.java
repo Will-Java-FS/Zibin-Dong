@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -21,11 +23,11 @@ public class Grocery {
     @Column(columnDefinition = "int CHECK (quantity>=0)")
     private int quantity;
 
-    @Column(columnDefinition = "double CHECK (price>0)")
-    private double price;
+    @Column(columnDefinition = "decimal(20,2) CHECK (price>0)")
+    private BigDecimal price;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "fk_owner")
+    @JoinColumn(name = "owner_id")
     @JsonBackReference
     private Account owner;
 }
