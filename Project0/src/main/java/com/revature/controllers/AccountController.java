@@ -20,16 +20,16 @@ public class AccountController {
     public AccountController(AccountService as) {this.as = as;}
 
     //Login to account
-    @PostMapping
-    public ResponseEntity<Account> accountLogin(@RequestBody Account a) throws UnAuthorizedException{
-        a = as.login(a);
-        return new ResponseEntity<>(a, HttpStatus.OK);
+    @PostMapping(value = "/login")
+    public @ResponseBody ResponseEntity<Account> accountLogin(@RequestBody Account a) throws UnAuthorizedException
+    {
+        return ResponseEntity.status(200).body(as.login(a));
     }
 
     //Create new account
-    @PostMapping(consumes = "application/json", produces ="application/json")
-    public ResponseEntity<Account> addAccount(@RequestBody Account a) throws ClientErrorException, DuplicateNameException {
-        a = as.createAccount(a);
-        return new ResponseEntity<>(a, HttpStatus.OK);
+    @PostMapping(value = "/register", consumes = "application/json", produces ="application/json")
+    public @ResponseBody ResponseEntity<Account> addAccount(@RequestBody Account a) throws ClientErrorException, DuplicateNameException
+    {
+        return ResponseEntity.status(200).body(as.createAccount(a));
     }
 }
