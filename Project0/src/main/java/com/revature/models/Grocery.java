@@ -3,7 +3,6 @@ package com.revature.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 @AllArgsConstructor
 @NoArgsConstructor
