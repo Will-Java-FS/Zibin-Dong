@@ -1,98 +1,33 @@
 package com.revature.models;
 
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
-import java.util.Objects;
 
-
-@Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Entity
+@Data
+@Table(name = "accounts")
 public class Account {
-    /*
-    * For this table, we will add the general account info of users.
-    * Then the basket will link to the basket table to show what this user have in
-    * the basket.
-    * */
-
-    // serial id of cust
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id", updatable = false)
     private int id;
 
-    // username of cust
-    @Column
+    // Account username
+    @Column(nullable = false, unique = true)
     private String name;
 
-    // password of cust
-    @Column
+    @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private boolean is_admin;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_owner")
+    @JsonManagedReference
     private List<Grocery> groceryList;
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isIs_admin() {
-        return is_admin;
-    }
-
-    public void setIs_admin(boolean is_admin) {
-        this.is_admin = is_admin;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Account account = (Account) o;
-        return getId() == account.getId() && isIs_admin() == account.isIs_admin() && Objects.equals(getName(), account.getName()) && Objects.equals(getPassword(), account.getPassword()) && Objects.equals(groceryList, account.groceryList);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getPassword(), isIs_admin(), groceryList);
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "groceryList=" + groceryList +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", password=" + password +
-                ", is_admin=" + is_admin +
-                '}';
-    }
 }
