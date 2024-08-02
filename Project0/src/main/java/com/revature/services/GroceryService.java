@@ -6,6 +6,7 @@ import com.revature.repositories.GroceryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class GroceryService {
             throw new ClientErrorException();
         }
 
-        if(grocery.getPrice() <= 0)
+        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0)
         {
             throw new ClientErrorException();
         }
@@ -56,7 +57,7 @@ public class GroceryService {
             throw new ClientErrorException();
         }
 
-        if(grocery.getPrice() <= 0)
+        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0)
         {
             throw new ClientErrorException();
         }
