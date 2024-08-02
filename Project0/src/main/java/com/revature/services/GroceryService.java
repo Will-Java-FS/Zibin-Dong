@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import com.revature.exception.ClientErrorException;
 import com.revature.models.Grocery;
 import com.revature.repositories.GroceryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,22 @@ public class GroceryService {
         this.groceryRepo = groceryRepo;
     }
 
-    public Grocery addGrocery(Grocery grocery)
+    public Grocery addGrocery(Grocery grocery) throws ClientErrorException
     {
+        if(grocery.getName() == null)
+        {
+            throw new ClientErrorException();
+        }
+
+        if(grocery.getPrice() <= 0)
+        {
+            throw new ClientErrorException();
+        }
+
+        if(grocery.getQuantity() < 1)
+        {
+            throw new ClientErrorException();
+        }
         return groceryRepo.save(grocery);
     }
 
@@ -34,17 +49,34 @@ public class GroceryService {
         return optionalGrocery.orElse(null);
     }
 
-    public Grocery updateGrocery(Grocery grocery)
+    public void updateGrocery(Grocery grocery) throws ClientErrorException
     {
+        if(grocery.getName() == null)
+        {
+            throw new ClientErrorException();
+        }
+
+        if(grocery.getPrice() <= 0)
+        {
+            throw new ClientErrorException();
+        }
+
+        if(grocery.getQuantity() < 1)
+        {
+            throw new ClientErrorException();
+        }
+
         Optional<Grocery> optionalGrocery = groceryRepo.findById(grocery.getId());
         if(optionalGrocery.isPresent())
         {
             Grocery temp = optionalGrocery.get();
             temp = grocery;
             groceryRepo.save(temp);
-            return temp;
         }
-        return null;
+        else
+        {
+            throw new ClientErrorException();
+        }
     }
 
     public void deleteGroceryByID(int ID)

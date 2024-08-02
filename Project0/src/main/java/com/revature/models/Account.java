@@ -77,7 +77,7 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return getId() == account.getId() && getPassword() == account.getPassword() && isIs_admin() == account.isIs_admin() && Objects.equals(getName(), account.getName()) && Objects.equals(groceryList, account.groceryList);
+        return getId() == account.getId() && isIs_admin() == account.isIs_admin() && Objects.equals(getName(), account.getName()) && Objects.equals(getPassword(), account.getPassword()) && Objects.equals(groceryList, account.groceryList);
     }
 
     @Override
