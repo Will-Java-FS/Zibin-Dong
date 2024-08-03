@@ -20,6 +20,9 @@ public class Grocery {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column
+    private String category;
+
     @Column(columnDefinition = "int CHECK (quantity>=0)")
     private int quantity;
 

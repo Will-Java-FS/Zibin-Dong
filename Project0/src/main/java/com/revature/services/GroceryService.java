@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.exception.ClientErrorException;
+import com.revature.models.Account;
 import com.revature.models.Grocery;
 import com.revature.repositories.GroceryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,68 +21,65 @@ public class GroceryService {
         this.groceryRepo = groceryRepo;
     }
 
-    public Grocery addGrocery(Grocery grocery) throws ClientErrorException
-    {
-        if(grocery.getName() == null)
-        {
-            throw new ClientErrorException();
-        }
+    public Grocery addGrocery(Grocery grocery) throws ClientErrorException {
+        Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
 
-        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0)
-        {
-            throw new ClientErrorException();
-        }
+        if(loggedInUser == null) throw new ClientErrorException();
+        if(grocery.getName() == null) throw new ClientErrorException();
+        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
+        if(grocery.getQuantity() > 0) throw new ClientErrorException();
 
-        if(grocery.getQuantity() < 1)
-        {
-            throw new ClientErrorException();
-        }
+        loggedInUser.getGroceryList().add(grocery);
         return groceryRepo.save(grocery);
     }
 
-    public List<Grocery> getAllGroceries()
-    {
-        return groceryRepo.findAll();
+    public List<Grocery> getAllGroceries() {
+        Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
+
+        if (loggedInUser.is_admin()) return groceryRepo.findAll();
+        return loggedInUser.getGroceryList();
     }
 
-    public Grocery getGroceryByID(int ID)
-    {
+    public Grocery getGroceryByID(int ID) {
+        Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
         Optional<Grocery> optionalGrocery = groceryRepo.findById(ID);
-        return optionalGrocery.orElse(null);
+
+        if (optionalGrocery.isPresent()
+                && (optionalGrocery.get().getOwner().equals(loggedInUser)
+                || loggedInUser.is_admin())) {
+            return optionalGrocery.get();
+        } else {
+            return null;
+        }
     }
 
-    public void updateGrocery(Grocery grocery) throws ClientErrorException
-    {
-        if(grocery.getName() == null)
-        {
-            throw new ClientErrorException();
-        }
+    public void updateGrocery(Grocery grocery) throws ClientErrorException {
+        Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
 
-        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0)
-        {
-            throw new ClientErrorException();
-        }
-
-        if(grocery.getQuantity() < 1)
-        {
-            throw new ClientErrorException();
-        }
+        if(loggedInUser == null) throw new ClientErrorException();
+        if(grocery.getName() == null) throw new ClientErrorException();
+        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
+        if(grocery.getQuantity() < 1) throw new ClientErrorException();
 
         Optional<Grocery> optionalGrocery = groceryRepo.findById(grocery.getId());
-        if(optionalGrocery.isPresent())
-        {
+        if(optionalGrocery.isPresent()) {
             Grocery temp = optionalGrocery.get();
             temp = grocery;
-            groceryRepo.save(temp);
-        }
-        else
-        {
+            if (temp.getOwner() == loggedInUser || loggedInUser.is_admin()) groceryRepo.save(temp);
+        } else {
             throw new ClientErrorException();
         }
     }
 
-    public void deleteGroceryByID(int ID)
-    {
-        groceryRepo.deleteById(ID);
+    public void deleteGroceryByID(int ID) {
+        Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
+        Optional<Grocery> optionalGrocery = groceryRepo.findById(ID);
+
+        if (optionalGrocery.isPresent()) {
+            if (optionalGrocery.get().getOwner().equals(loggedInUser) || loggedInUser.is_admin()) {
+                groceryRepo.deleteById(ID);
+            }
+        }
     }
+
 }

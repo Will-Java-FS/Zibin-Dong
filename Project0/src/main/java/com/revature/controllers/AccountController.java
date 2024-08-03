@@ -6,7 +6,6 @@ import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Account;
 import com.revature.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +20,13 @@ public class AccountController {
 
     //Login to account
     @PostMapping(value = "/login")
-    public @ResponseBody ResponseEntity<Account> accountLogin(@RequestBody Account a) throws UnAuthorizedException
-    {
+    public @ResponseBody ResponseEntity<Account> accountLogin(@RequestBody Account a) throws UnAuthorizedException {
         return ResponseEntity.status(200).body(as.login(a));
     }
 
     //Create new account
     @PostMapping(value = "/register", consumes = "application/json", produces ="application/json")
-    public @ResponseBody ResponseEntity<Account> addAccount(@RequestBody Account a) throws ClientErrorException, DuplicateNameException
-    {
+    public @ResponseBody ResponseEntity<Account> addAccount(@RequestBody Account a) throws ClientErrorException, DuplicateNameException {
         return ResponseEntity.status(200).body(as.createAccount(a));
     }
 }

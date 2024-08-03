@@ -17,34 +17,21 @@ public class AccountService {
         this.accountRepo = accountRepo;
     }
 
-    public Account createAccount(Account account) throws ClientErrorException, DuplicateNameException
-    {
-        if(account.getName().isEmpty())
-        {
-            throw new ClientErrorException();
-        }
-        if(account.getPassword().length() < 4)
-        {
-            throw new ClientErrorException();
-        }
+    public Account createAccount(Account account) throws ClientErrorException, DuplicateNameException {
+        if(account.getName().isEmpty()) throw new ClientErrorException();
+        if(account.getPassword().length() < 4) throw new ClientErrorException();
+        if(accountRepo.searchAccountByName(account.getName()) != null) throw new DuplicateNameException();
 
-        if(accountRepo.searchAccountByName(account.getName()) != null)
-        {
-            throw new DuplicateNameException();
-        }
         return accountRepo.save(account);
     }
 
-    public Account login(Account account) throws UnAuthorizedException
-    {
-        if(accountRepo.searchAccountByName(account.getName()) == null)
-        {
-            throw new UnAuthorizedException();
-        }
-        if(!accountRepo.searchAccountByName(account.getName()).getPassword().equals(account.getPassword()))
-        {
-            throw new UnAuthorizedException();
-        }
-        return accountRepo.searchAccountByName(account.getName());
+    public Account login(Account account) throws UnAuthorizedException {
+        Account accountActual = accountRepo.searchAccountByName(account.getName());
+
+        if(accountActual == null) throw new UnAuthorizedException();
+        if(!accountActual.getPassword().equals(account.getPassword())) throw new UnAuthorizedException();
+
+        LoggedInUserService.getInstance().setLoggedInUser(accountActual);
+        return accountActual;
     }
 }

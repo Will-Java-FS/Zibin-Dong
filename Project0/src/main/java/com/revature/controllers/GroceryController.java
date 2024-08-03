@@ -4,7 +4,6 @@ import com.revature.exception.ClientErrorException;
 import com.revature.models.Grocery;
 import com.revature.services.GroceryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,24 +28,15 @@ public class GroceryController {
 
     //Create new item
     @PostMapping(consumes = "application/json", produces ="application/json")
-    public ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) throws ClientErrorException
-    {
-        g = gs.addGrocery(g);
-        return new ResponseEntity<>(g, HttpStatus.OK);
+    public @ResponseBody ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) throws ClientErrorException {
+        return ResponseEntity.status(200).body(gs.addGrocery(g));
     }
 
     //Update item
-    @PutMapping("/{id}")
-    public ResponseEntity<Grocery> updateGrocery(@PathVariable int id, @RequestBody Grocery g) throws ClientErrorException
-    {
-        g.setId(id);
-        Grocery gOld = gs.getGroceryByID(id);
-        if (gOld.getId() == id) {
-            g = gs.updateGrocery(g);
-            return new ResponseEntity<>(g, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        }
+    @PutMapping("/update")
+    public @ResponseBody ResponseEntity<Integer> updateGrocery(@RequestBody Grocery g) throws ClientErrorException {
+        gs.updateGrocery(g);
+        return ResponseEntity.status(200).body(1);
     }
 
     //Delete item by id
@@ -54,5 +44,4 @@ public class GroceryController {
     public void deleteGrocery(@PathVariable int id) {
         gs.deleteGroceryByID(id);
     }
-
 }
