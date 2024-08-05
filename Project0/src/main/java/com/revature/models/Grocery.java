@@ -24,7 +24,7 @@ public class Grocery {
     private String category;
 
     @Column(columnDefinition = "int CHECK (quantity>=0)")
-    private int quantity;
+    private Integer quantity;
 
     @Column(columnDefinition = "decimal(20,2) CHECK (price>0)")
     private BigDecimal price;

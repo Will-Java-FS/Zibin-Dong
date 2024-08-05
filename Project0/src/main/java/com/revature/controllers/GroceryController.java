@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.exception.ClientErrorException;
+import com.revature.exception.NotFoundException;
 import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Grocery;
 import com.revature.services.GroceryService;
@@ -34,9 +35,9 @@ public class GroceryController {
     }
 
     //Update item
-    @PutMapping("/update")
-    public @ResponseBody ResponseEntity<Integer> updateGrocery(@RequestBody Grocery g) throws ClientErrorException {
-        gs.updateGrocery(g);
+    @PutMapping("/update/{id}")
+    public @ResponseBody ResponseEntity<Integer> updateGrocery(@PathVariable int id, @RequestBody Grocery g) throws ClientErrorException, NotFoundException {
+        gs.updateGrocery(id, g);
         return ResponseEntity.status(200).body(1);
     }
 

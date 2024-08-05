@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.exception.ClientErrorException;
+import com.revature.exception.NotFoundException;
 import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Account;
 import com.revature.models.Grocery;
@@ -47,7 +48,7 @@ public class GroceryService {
         Optional<Grocery> optionalGrocery = groceryRepo.findById(ID);
 
         if (optionalGrocery.isPresent()
-                && (optionalGrocery.get().getOwner().equals(loggedInUser)
+                && (optionalGrocery.get().getOwner().getId() == loggedInUser.getId()
                 || loggedInUser.is_admin())) {
             return optionalGrocery.get();
         } else {
@@ -55,21 +56,28 @@ public class GroceryService {
         }
     }
 
-    public void updateGrocery(Grocery grocery) throws ClientErrorException {
+    public void updateGrocery(int id, Grocery grocery) throws ClientErrorException, NotFoundException {
         Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
 
         if(loggedInUser == null) throw new ClientErrorException();
-        if(grocery.getName() == null) throw new ClientErrorException();
-        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
-        if(grocery.getQuantity() < 1) throw new ClientErrorException();
 
-        Optional<Grocery> optionalGrocery = groceryRepo.findById(grocery.getId());
+        Optional<Grocery> optionalGrocery = groceryRepo.findById(id);
         if(optionalGrocery.isPresent()) {
             Grocery temp = optionalGrocery.get();
-            temp = grocery;
-            if (temp.getOwner() == loggedInUser || loggedInUser.is_admin()) groceryRepo.save(temp);
+            if (temp.getOwner().getId() == loggedInUser.getId() || loggedInUser.is_admin()) {
+                if(grocery.getName() != null) temp.setName(grocery.getName());
+                if(grocery.getPrice() != null) {
+                    if (grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
+                    else temp.setPrice(grocery.getPrice());
+                }
+                if(grocery.getQuantity() != null) {
+                    if(grocery.getQuantity() < 1) throw new ClientErrorException();
+                    else temp.setQuantity(grocery.getQuantity());
+                }
+                groceryRepo.save(temp);
+            }
         } else {
-            throw new ClientErrorException();
+            throw new NotFoundException();
         }
     }
 
@@ -79,7 +87,7 @@ public class GroceryService {
 
         if (optionalGrocery.isPresent()) {
             Account owner = optionalGrocery.get().getOwner();
-            if (owner.equals(loggedInUser) || loggedInUser.is_admin()) {
+            if (owner.getId() == loggedInUser.getId() || loggedInUser.is_admin()) {
                 owner.getGroceryList().remove(optionalGrocery.get());
                 groceryRepo.deleteById(ID);
             }
