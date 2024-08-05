@@ -78,7 +78,9 @@ public class GroceryService {
         Optional<Grocery> optionalGrocery = groceryRepo.findById(ID);
 
         if (optionalGrocery.isPresent()) {
-            if (optionalGrocery.get().getOwner().equals(loggedInUser) || loggedInUser.is_admin()) {
+            Account owner = optionalGrocery.get().getOwner();
+            if (owner.equals(loggedInUser) || loggedInUser.is_admin()) {
+                owner.getGroceryList().remove(optionalGrocery.get());
                 groceryRepo.deleteById(ID);
             }
         }
