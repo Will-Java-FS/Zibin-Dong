@@ -60,7 +60,7 @@ public class GroceryService {
 
         if(loggedInUser == null) throw new ClientErrorException();
         if(grocery.getName() == null) throw new ClientErrorException();
-        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
+        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) <= 0) throw new ClientErrorException();
         if(grocery.getQuantity() < 1) throw new ClientErrorException();
 
         Optional<Grocery> optionalGrocery = groceryRepo.findById(grocery.getId());
