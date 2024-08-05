@@ -29,8 +29,8 @@ public class Grocery {
     @Column(columnDefinition = "decimal(20,2) CHECK (price>0)")
     private BigDecimal price;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "owner_id", referencedColumnName = "account_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
     @JsonBackReference
     private Account owner;
 }

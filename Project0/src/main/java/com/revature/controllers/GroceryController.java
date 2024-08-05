@@ -22,7 +22,7 @@ public class GroceryController {
 
     //View all items
     @GetMapping
-    public List<Grocery> getAllGroceries() {return gs.getAllGroceries();}
+    public List<Grocery> getAllGroceries() throws UnAuthorizedException {return gs.getAllGroceries();}
 
     //View item by id
     @GetMapping("/{id}")

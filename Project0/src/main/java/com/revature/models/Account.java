@@ -26,8 +26,7 @@ public class Account {
     @Column(nullable = false)
     private boolean is_admin;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id", referencedColumnName = "account_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
     @JsonManagedReference
-    private List<Grocery> groceryList;
+    private List<Grocery> groceries;
 }
