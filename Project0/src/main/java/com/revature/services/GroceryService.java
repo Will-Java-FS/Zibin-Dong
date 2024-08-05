@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.exception.ClientErrorException;
+import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Account;
 import com.revature.models.Grocery;
 import com.revature.repositories.GroceryRepo;
@@ -21,14 +22,15 @@ public class GroceryService {
         this.groceryRepo = groceryRepo;
     }
 
-    public Grocery addGrocery(Grocery grocery) throws ClientErrorException {
+    public Grocery addGrocery(Grocery grocery) throws ClientErrorException, UnAuthorizedException {
         Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
 
-        if(loggedInUser == null) throw new ClientErrorException();
+        if(loggedInUser == null) throw new UnAuthorizedException();
         if(grocery.getName() == null) throw new ClientErrorException();
-        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
-        if(grocery.getQuantity() > 0) throw new ClientErrorException();
+        if(grocery.getPrice().compareTo(new BigDecimal("0.0")) <= 0) throw new ClientErrorException();
+        if(grocery.getQuantity() < 1) throw new ClientErrorException();
 
+        grocery.setOwner(loggedInUser);
         loggedInUser.getGroceryList().add(grocery);
         return groceryRepo.save(grocery);
     }

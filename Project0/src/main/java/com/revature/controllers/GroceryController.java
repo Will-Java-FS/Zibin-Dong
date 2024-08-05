@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.exception.ClientErrorException;
+import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Grocery;
 import com.revature.services.GroceryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class GroceryController {
     public Grocery getGrocery(@PathVariable int id) {return gs.getGroceryByID(id);}
 
     //Create new item
-    @PostMapping(consumes = "application/json", produces ="application/json")
-    public @ResponseBody ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) throws ClientErrorException {
+    @PostMapping
+    public @ResponseBody ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) throws ClientErrorException, UnAuthorizedException {
         return ResponseEntity.status(200).body(gs.addGrocery(g));
     }
 

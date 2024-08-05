@@ -30,7 +30,7 @@ public class Grocery {
     private BigDecimal price;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "account_id")
     @JsonBackReference
     private Account owner;
 }
