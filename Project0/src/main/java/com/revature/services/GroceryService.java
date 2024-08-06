@@ -73,7 +73,7 @@ public class GroceryService {
                 // Must meet new grocery requirements
                 if(grocery.getName() != null) temp.setName(grocery.getName());
                 if(grocery.getPrice() != null) {
-                    if (grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
+                    if (grocery.getPrice().compareTo(new BigDecimal("0.0")) <= 0) throw new ClientErrorException();
                     else temp.setPrice(grocery.getPrice());
                 }
                 if(grocery.getQuantity() != null) {
