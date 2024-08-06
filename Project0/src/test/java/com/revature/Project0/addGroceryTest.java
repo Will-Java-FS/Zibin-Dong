@@ -8,7 +8,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-import com.revature.models.Account;
 import com.revature.services.LoggedInUserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import com.revature.models.Grocery;
-import com.revature.models.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
