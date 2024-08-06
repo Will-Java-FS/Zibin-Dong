@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoggedInUserService {
+    // Singleton used to store logged in user
     private static LoggedInUserService singleton = null;
 
     @Getter

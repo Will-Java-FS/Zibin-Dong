@@ -11,9 +11,6 @@ import java.util.List;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Integer> {
-
-    List<Grocery> findGroceryByName(String name);
-
     @Query("From Account WHERE name = :nameVar")
     public Account searchAccountByName(@Param("nameVar") String name);
 }

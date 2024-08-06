@@ -7,6 +7,7 @@ import com.revature.models.Account;
 import com.revature.models.Grocery;
 import com.revature.repositories.AccountRepo;
 import com.revature.repositories.GroceryRepo;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +31,11 @@ public class GroceryService {
         Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
 
         if(loggedInUser == null) throw new UnAuthorizedException();
+        // New grocery requirements: has name, price greater than $0.00 and quantity greater than 0
         if(grocery.getName() == null) throw new ClientErrorException();
         if(grocery.getPrice().compareTo(new BigDecimal("0.0")) <= 0) throw new ClientErrorException();
         if(grocery.getQuantity() < 1) throw new ClientErrorException();
-
+        // Add item to logged in user
         grocery.setOwner(loggedInUser);
         loggedInUser.getGroceries().add(grocery);
         return groceryRepo.save(grocery);
@@ -43,20 +45,22 @@ public class GroceryService {
         Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
 
         if (loggedInUser == null) throw new UnAuthorizedException();
+        // Return all if admin OR
+        // Return users items
         if (loggedInUser.is_admin()) return groceryRepo.findAll();
         return accountRepo.findById(loggedInUser.getId()).get().getGroceries();
     }
 
-    public Grocery getGroceryByID(int ID) {
+    public Grocery getGroceryByID(int ID) throws NotFoundException {
         Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
         Optional<Grocery> optionalGrocery = groceryRepo.findById(ID);
-
+        // Must be admin or own item to return it
         if (optionalGrocery.isPresent()
                 && (optionalGrocery.get().getOwner().getId() == loggedInUser.getId()
                 || loggedInUser.is_admin())) {
             return optionalGrocery.get();
         } else {
-            return null;
+            throw new NotFoundException();
         }
     }
 
@@ -68,7 +72,9 @@ public class GroceryService {
         Optional<Grocery> optionalGrocery = groceryRepo.findById(id);
         if(optionalGrocery.isPresent()) {
             Grocery temp = optionalGrocery.get();
+            // Must be admin or own item to update it
             if (temp.getOwner().getId() == loggedInUser.getId() || loggedInUser.is_admin()) {
+                // Must meet new grocery requirements
                 if(grocery.getName() != null) temp.setName(grocery.getName());
                 if(grocery.getPrice() != null) {
                     if (grocery.getPrice().compareTo(new BigDecimal("0.0")) > 0) throw new ClientErrorException();
@@ -91,6 +97,7 @@ public class GroceryService {
 
         if (optionalGrocery.isPresent()) {
             Account owner = optionalGrocery.get().getOwner();
+            // Must be admin or own item to delete it
             if (owner.getId() == loggedInUser.getId() || loggedInUser.is_admin()) {
                 groceryRepo.deleteById(ID);
                 owner.getGroceries().remove(optionalGrocery.get());

@@ -18,13 +18,13 @@ public class AccountController {
     @Autowired
     public AccountController(AccountService as) {this.as = as;}
 
-    //Login to account
+    // Login to account
     @PostMapping(value = "/login")
     public @ResponseBody ResponseEntity<Account> accountLogin(@RequestBody Account a) throws UnAuthorizedException {
         return ResponseEntity.status(200).body(as.login(a));
     }
 
-    //Create new account
+    // Create new account
     @PostMapping(value = "/register", consumes = "application/json", produces ="application/json")
     public @ResponseBody ResponseEntity<Account> addAccount(@RequestBody Account a) throws ClientErrorException, DuplicateNameException {
         return ResponseEntity.status(200).body(as.createAccount(a));

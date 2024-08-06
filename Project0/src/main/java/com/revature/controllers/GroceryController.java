@@ -20,28 +20,29 @@ public class GroceryController {
     @Autowired
     public GroceryController(GroceryService gs) {this.gs = gs;}
 
-    //View all items
+    // View all items owned by logged-in user OR
+    // View every item if admin
     @GetMapping
     public List<Grocery> getAllGroceries() throws UnAuthorizedException {return gs.getAllGroceries();}
 
-    //View item by id
+    // View item by id
     @GetMapping("/{id}")
-    public Grocery getGrocery(@PathVariable int id) {return gs.getGroceryByID(id);}
+    public Grocery getGrocery(@PathVariable int id) throws NotFoundException {return gs.getGroceryByID(id);}
 
-    //Create new item
+    // Create new item to logged-in user
     @PostMapping
     public @ResponseBody ResponseEntity<Grocery> addGrocery(@RequestBody Grocery g) throws ClientErrorException, UnAuthorizedException {
         return ResponseEntity.status(200).body(gs.addGrocery(g));
     }
 
-    //Update item
+    // Update item
     @PutMapping("/update/{id}")
     public @ResponseBody ResponseEntity<Integer> updateGrocery(@PathVariable int id, @RequestBody Grocery g) throws ClientErrorException, NotFoundException {
         gs.updateGrocery(id, g);
         return ResponseEntity.status(200).body(1);
     }
 
-    //Delete item by id
+    // Delete item by id
     @DeleteMapping("/{id}")
     public void deleteGrocery(@PathVariable int id) {
         gs.deleteGroceryByID(id);
