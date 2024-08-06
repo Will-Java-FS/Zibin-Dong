@@ -91,7 +91,7 @@ public class GroceryService {
         }
     }
 
-    public void deleteGroceryByID(int ID) {
+    public Integer deleteGroceryByID(int ID) {
         Account loggedInUser = LoggedInUserService.getInstance().getLoggedInUser();
         Optional<Grocery> optionalGrocery = groceryRepo.findById(ID);
 
@@ -101,8 +101,10 @@ public class GroceryService {
             if (owner.getId() == loggedInUser.getId() || loggedInUser.is_admin()) {
                 groceryRepo.deleteById(ID);
                 loggedInUser.getGroceries().removeIf(gro -> gro.getId() == ID);
+                return 1;
             }
         }
+        return null;
     }
 
 }

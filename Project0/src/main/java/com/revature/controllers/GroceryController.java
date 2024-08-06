@@ -44,7 +44,7 @@ public class GroceryController {
 
     // Delete item by id
     @DeleteMapping("/{id}")
-    public void deleteGrocery(@PathVariable int id) {
-        gs.deleteGroceryByID(id);
+    public @ResponseBody ResponseEntity<Integer> deleteGrocery(@PathVariable int id) {
+        return ResponseEntity.status(200).body(gs.deleteGroceryByID(id));
     }
 }
