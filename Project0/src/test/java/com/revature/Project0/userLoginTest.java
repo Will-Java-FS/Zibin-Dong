@@ -16,8 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.models.Account;
 
 public class userLoginTest {
     ApplicationContext app;
@@ -53,7 +51,7 @@ public class userLoginTest {
         Assertions.assertEquals(200, status);
         ObjectMapper om = new ObjectMapper();
         List<Grocery> el = List.of();
-        Account expectedResult = new Account(7 , "Goodman2", "doodman", false, el);
+        Account expectedResult = new Account(5 , "Goodman2", "doodman", false, el);
         Account actualResult = om.readValue(response.body().toString(), Account.class);
         Assertions.assertEquals(expectedResult, actualResult);
 

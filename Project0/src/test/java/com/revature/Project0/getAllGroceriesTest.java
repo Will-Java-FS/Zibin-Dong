@@ -9,19 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.revature.models.Account;
 import com.revature.services.LoggedInUserService;
-import org.aspectj.bridge.Message;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import com.revature.models.Grocery;
-import com.revature.models.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class getAllGroceriesTest {
@@ -101,6 +97,7 @@ public class getAllGroceriesTest {
 
         expectedResult.add(new Grocery(1, "Apple", "Fruits", 1, new BigDecimal("0.99"), null));
         expectedResult.add(new Grocery(2, "Banana", "Fruits", 4, new BigDecimal("1.50"), null));
+        expectedResult.add(new Grocery(3, "mango", "Fruits", 5, new BigDecimal("2.22"), null));
 
         List<Grocery> actualResult = objectMapper.readValue(response.body().toString(), new TypeReference<List<Grocery>>() {});
         Assertions.assertEquals(expectedResult, actualResult, "Expected="+expectedResult + ", Actual="+actualResult);

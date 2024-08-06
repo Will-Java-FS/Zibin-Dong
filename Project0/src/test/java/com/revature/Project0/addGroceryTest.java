@@ -6,15 +6,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-
 import com.revature.services.LoggedInUserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 import com.revature.models.Grocery;
@@ -67,7 +64,7 @@ public class addGroceryTest {
         int status = response.statusCode();
         Assertions.assertEquals(200, status, "Expected Status Code 200 - Actual Code was: " + status);
         ObjectMapper om = new ObjectMapper();
-        Grocery expectedResult = new Grocery(49, "mango", "Fruits" , 5, new BigDecimal("2.22") , null);
+        Grocery expectedResult = new Grocery(3, "mango", "Fruits" , 5, new BigDecimal("2.22") , null);
         Grocery actualResult = om.readValue(response.body().toString(), Grocery.class);
         Assertions.assertEquals(expectedResult, actualResult, "Expected="+expectedResult + ", Actual="+actualResult);
     }

@@ -1,28 +1,20 @@
 package com.revature.Project0;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.revature.models.Account;
+
 import com.revature.services.LoggedInUserService;
-import org.aspectj.bridge.Message;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
-import com.revature.models.Grocery;
-import com.revature.models.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class deleteGroceryByIDTest {
@@ -84,7 +76,7 @@ public class deleteGroceryByIDTest {
         HttpResponse<String> responselg = webClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/groceries/2"))
+                .uri(URI.create("http://localhost:8080/groceries/100"))
                 .DELETE()
                 .build();
 
