@@ -5,9 +5,7 @@ import com.revature.exception.NotFoundException;
 import com.revature.exception.UnAuthorizedException;
 import com.revature.models.Account;
 import com.revature.models.Grocery;
-import com.revature.repositories.AccountRepo;
 import com.revature.repositories.GroceryRepo;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +16,11 @@ import java.util.Optional;
 @Service
 public class GroceryService {
     GroceryRepo groceryRepo;
-    AccountRepo accountRepo;
 
     @Autowired
-    public GroceryService(GroceryRepo groceryRepo, AccountRepo accountRepo)
+    public GroceryService(GroceryRepo groceryRepo)
     {
         this.groceryRepo = groceryRepo;
-        this.accountRepo = accountRepo;
     }
 
     public Grocery addGrocery(Grocery grocery) throws ClientErrorException, UnAuthorizedException {
@@ -48,7 +44,7 @@ public class GroceryService {
         // Return all if admin OR
         // Return users items
         if (loggedInUser.is_admin()) return groceryRepo.findAll();
-        return accountRepo.findById(loggedInUser.getId()).get().getGroceries();
+        return loggedInUser.getGroceries();
     }
 
     public Grocery getGroceryByID(int ID) throws NotFoundException {
