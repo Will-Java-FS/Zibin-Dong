@@ -80,6 +80,10 @@ public class GroceryService {
                     if(grocery.getQuantity() < 1) throw new ClientErrorException();
                     else temp.setQuantity(grocery.getQuantity());
                 }
+                for (Grocery gro : loggedInUser.getGroceries()) {
+                    if (gro.getId() == id) loggedInUser.getGroceries()
+                            .set(loggedInUser.getGroceries().indexOf(gro), temp);
+                }
                 groceryRepo.save(temp);
             }
         } else {
