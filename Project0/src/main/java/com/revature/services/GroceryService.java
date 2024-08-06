@@ -100,7 +100,7 @@ public class GroceryService {
             // Must be admin or own item to delete it
             if (owner.getId() == loggedInUser.getId() || loggedInUser.is_admin()) {
                 groceryRepo.deleteById(ID);
-                owner.getGroceries().remove(optionalGrocery.get());
+                loggedInUser.getGroceries().removeIf(gro -> gro.getId() == ID);
             }
         }
     }
